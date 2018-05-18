@@ -2,6 +2,7 @@ package com.ytd.mds.v1;
 
 import java.util.List;
 
+import com.ytd.mds.v1.pojo.OrderPojo;
 import com.ytd.mds.v1.pojo.UserModel;
 
 /**
@@ -26,4 +27,6 @@ public interface IUserService {
 	public void deleteUser(String uid);
 
 	public void updateUser(UserModel user);
+	
+	public List<OrderPojo> createOrder(String size, String userId);
 }

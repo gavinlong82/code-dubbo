@@ -1,8 +1,12 @@
 package com.ytd.mds.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +15,8 @@ import com.ytd.mds.dao.IUserDao;
 import com.ytd.mds.exception.CustomRuntimeException;
 import com.ytd.mds.pojo.User;
 import com.ytd.mds.v1.IUserService;
+import com.ytd.mds.v1.pojo.OrderItemPojo;
+import com.ytd.mds.v1.pojo.OrderPojo;
 import com.ytd.mds.v1.pojo.UserModel;
 
 public class UserServiceImpl implements IUserService {
@@ -18,7 +24,7 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	@Qualifier("userDao")
 	private IUserDao userDao;
-	
+
 	@Autowired
 	@Qualifier("userSlave1Dao")
 	private IUserDao userSlave1Dao;
@@ -121,6 +127,26 @@ public class UserServiceImpl implements IUserService {
 			throw new CustomRuntimeException(e);
 		}
 
+	}
+
+	public List<OrderPojo> createOrder(String size, String userId) {
+		int count = StringUtils.isEmpty(size) ? 20 : Integer.valueOf(size);
+
+		List<OrderPojo> orderList = new ArrayList<OrderPojo>();
+		OrderPojo order = null;
+		for (int i = 0; i < count; i++) {
+			order = new OrderPojo();
+			order.setCreateTime(new Date());
+			order.setItems(Arrays.asList(new OrderItemPojo[] {}));
+			order.setOrderName("玩具" + i);
+			order.setOrderNo(UUID.randomUUID().toString());
+			order.setOrderStatus("E");
+			order.setUserId(Long.valueOf(userId));
+			orderList.add(order);
+			order = null;
+		}
+
+		return orderList;
 	}
 
 }
